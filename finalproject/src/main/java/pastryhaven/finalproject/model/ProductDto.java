@@ -14,10 +14,10 @@ public class ProductDto {
     private String name;
 
     @Min(value = 0, message = "Stock cannot be negative")
-    private Integer stock;
+    private int stock = 0;
 
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero")
-    private Double price;
+    private BigDecimal price;
 
     @NotBlank(message = "Description is required")
     private String description;
@@ -36,15 +36,15 @@ public class ProductDto {
         return stock;
     }
 
-    public void setStock(Integer stock) {
+    public void setStock(int stock) {
         this.stock = stock;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

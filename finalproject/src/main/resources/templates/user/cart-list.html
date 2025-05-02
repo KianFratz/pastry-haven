@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Cart</title>
+    <!-- include your CSS/JS -->
+</head>
+<body>
+<h1 class="text-3xl font-bold mb-4">Shopping Cart</h1>
+
+    <table class="min-w-full table-auto">
+        <thead>
+        <tr>
+            <th class="px-4 py-2">Product</th>
+            <th class="px-4 py-2">Price</th>
+            <th class="px-4 py-2">Quantity</th>
+            <th class="px-4 py-2">Subtotal</th>
+            <th class="px-4 py-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop only for listing items -->
+        <tr th:each="item : ${items}">
+            <td class="border px-4 py-2" th:text="${item.product.name}">Product Name</td>
+            <td class="border px-4 py-2" th:text="${item.product.price}">0.00</td>
+            <td class="border px-4 py-2" th:text="${item.quantity}">1</td>
+            <td class="border px-4 py-2"
+                th:text="${#numbers.formatDecimal(item.quantity * item.product.price, 1, 2)}">
+                0.00
+            </td>
+            <td class="border px-4 py-2 space-x-2">
+                <a th:href="@{'/user/cart/update/' + ${item.id}}"
+                   class="px-2 py-1 bg-yellow-400 text-white rounded">Edit</a>
+                <a th:href="@{'/user/cart/delete/' + ${item.id}}"
+                   class="px-2 py-1 bg-red-500 text-white rounded">Remove</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+<!-- Grand total & Pay Now form, outside the loop -->
+<div class="mt-6 text-right">
+    <span class="font-semibold">Total:</span>
+    <span class="text-xl" th:text="${#numbers.formatDecimal(total, 1, 2)}">0.00</span>
+</div>
+
+<!-- single pay form, passing cart.id as path variable -->
+<!--<div th:with="itemId=${items.id}">-->
+<!--    <form th:action="@{/user/cart/payment/pay/{id}(id=${items.id})}"-->
+<!--          method="post"-->
+<!--          class="mt-4 text-right">-->
+<!--        <input type="hidden" name="amount"-->
+<!--               th:value="${total.multiply(T(java.math.BigDecimal).valueOf(100L))}" />-->
+<!--        <button type="submit"-->
+<!--                class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full">-->
+<!--            Pay Now-->
+<!--        </button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!-- Alternative if using paymentItemId instead of cartId -->
+<form th:if="${paymentItemId != null}"
+      th:action="@{/user/cart/payment/pay/{id}(id=${paymentItemId})}"
+      method="post"
+      class="mt-4 text-right">
+    <input type="hidden" name="amount"
+           th:value="${total.multiply(T(java.math.BigDecimal).valueOf(100L))}" />
+    <button type="submit"
+            class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full">
+        Pay Now
+    </button>
+</form>
+
+
+<div class="mt-6">
+    <a href="/user/products"
+       class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        Continue Shopping
+    </a>
+</div>
+</body>
+</html>
