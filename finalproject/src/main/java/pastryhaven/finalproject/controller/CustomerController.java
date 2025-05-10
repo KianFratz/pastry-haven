@@ -1,22 +1,32 @@
 package pastryhaven.finalproject.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+import org.springframework.web.bind.support.SessionStatus;
 import pastryhaven.finalproject.model.Customer;
 import pastryhaven.finalproject.repository.CustomerRepository;
 
 
 @Controller
+@SessionAttributes("customer")
 @RequestMapping("/customer")
 public class CustomerController {
 
     @Autowired
     private CustomerRepository repository;
-    
+
+    // This ensures the customer attribute is available in the session
+    @ModelAttribute("customer")
+    public Customer getCustomer() {
+        return new Customer();
+    }
+
+
     @GetMapping({""})
     public String listCustomer(Model model) {
         model.addAttribute("customer", repository.findAll());
@@ -24,8 +34,18 @@ public class CustomerController {
     }
     
     @GetMapping("/aboutus")
-    public String aboutUspage() {
-    	return "about-us";
+    public String aboutUspage(@ModelAttribute("customer") Customer customer, Model model,
+                              HttpSession session) {
+
+        // Store username for all future requests
+//        session.setAttribute("username", customer.getFirstName());// for this view
+//        model.addAttribute("username", customer.getFirstName());
+
+        String username = customer.getFirstName();
+        model.addAttribute("username", username);
+
+        return "about-us";
+
     }
     
     @PostMapping("/saveCustomer")
@@ -67,6 +87,10 @@ public class CustomerController {
         return "redirect:/customer";  // Redirect ensures page refreshes
     }
 
-
+    @GetMapping("/logout")
+    public String logout(SessionStatus status) {
+        status.setComplete(); // Clear the session
+        return "redirect:/login";
+    }
 }
 

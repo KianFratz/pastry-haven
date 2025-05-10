@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment History - Pastry Haven</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4">Payment History</h1>
+
+  <div th:if="${payments.isEmpty()}" class="alert alert-info">
+    You haven't made any payments yet. <a href="/user/products" class="alert-link">Start shopping</a>
+  </div>
+
+  <div th:unless="${payments.isEmpty()}">
+    <div class="accordion" id="paymentsAccordion">
+      <div class="accordion-item" th:each="payment, stat : ${payments}">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                  th:data-bs-target="'#collapse' + ${payment.id}"
+                  th:aria-expanded="${stat.first ? 'true' : 'false'}"
+                  th:aria-controls="'collapse' + ${payment.id}">
+            <div class="d-flex w-100 justify-content-between">
+              <span th:text="'Order #' + ${payment.id} + ' - ' + ${#temporals.format(payment.paymentDate, 'MMMM dd, yyyy')}"></span>
+              <span class="ms-2 badge bg-primary" th:text="${#numbers.formatCurrency(payment.totalAmount)}"></span>
+            </div>
+          </button>
+        </h2>
+        <div th:id="'collapse' + ${payment.id}" class="accordion-collapse collapse" th:classappend="${stat.first ? 'show' : ''}"
+             data-bs-parent="#paymentsAccordion">
+          <div class="accordion-body">
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <strong>Date:</strong> <span th:text="${#temporals.format(payment.paymentDate, 'MMMM dd, yyyy HH:mm')}"></span>
+              </div>
+              <div class="col-md-4">
+                <strong>Payment Method:</strong> <span th:text="${payment.paymentMethod}"></span>
+              </div>
+              <div class="col-md-4">
+                <strong>Total Amount:</strong> <span th:text="${#numbers.formatCurrency(payment.totalAmount)}"></span>
+              </div>
+            </div>
+
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="item : ${payment.paymentItems}">
+                <td th:text="${item.productName}"></td>
+                <td th:text="${#numbers.formatCurrency(item.productPrice)}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${#numbers.formatCurrency(item.subtotal)}"></td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <th colspan="3" class="text-end">Total:</th>
+                <th th:text="${#numbers.formatCurrency(payment.totalAmount)}"></th>
+              </tr>
+              </tfoot>
+            </table>
+
+            <a th:href="@{/checkout/confirmation/{id}(id=${payment.id})}" class="btn btn-sm btn-outline-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a href="/user/products" class="btn btn-primary">Continue Shopping</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

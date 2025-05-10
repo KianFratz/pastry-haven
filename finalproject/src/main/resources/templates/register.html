@@ -77,10 +77,10 @@
 
                 <div class="mt-6">
                     <label class="block text-pink-600 font-medium mb-2">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required
+                    <input th:field="*{confirmPassword}" type="password" id="confirmPassword" name="confirmPassword" required
                         class="w-full px-4 py-3 rounded-lg border border-pink-200 focus:outline-none focus:border-pink-500" />
-                    <div th:if="${#fields.hasErrors('password')}"
-                         th:errors="*{password}" class="text-red-600 text-sm mt-1" >Password Error</div>
+                    <div th:if="${#fields.hasErrors('confirmPassword')}"
+                         th:errors="*{confirmPassword}" class="text-red-600 text-sm mt-1" >Password Error</div>
                 </div>
                 
                 <div class="mt-6">

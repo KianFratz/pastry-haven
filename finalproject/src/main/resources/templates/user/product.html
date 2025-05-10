@@ -16,11 +16,17 @@
                 <a href="/">
                     <span class="text-pink-500 text-2xl font-bold">PastryHaven</span>
                 </a>
+                <!-- Render the username from the model -->
+                <a class="ml-6 text-gray-600 hover:text-pink-500 transition duration-300">
+                    Welcome, <span th:text="${session.customer.firstName}">User</span>!
+                </a>
             </div>
             <div class="hidden md:flex items-center space-x-8">
-				<a href="/customer/aboutus" class="text-gray-600 hover:text-pink-500 transition duration-300">About Us</a>
-				<a href="/user/products" class="text-gray-600 hover:text-pink-500 transition duration-300">Product</a>
+                <a href="/user/products" class="text-gray-600 hover:text-pink-500 transition duration-300">Product</a>
                 <a href="/user/cart" class="text-gray-600 hover:text-pink-500 transition duration-300">Cart</a>
+                <a href="/checkout/history" class="text-gray-600 hover:text-pink-500 transition duration-300">History</a>
+                <a href="/customer/aboutus" class="text-gray-600 hover:text-pink-500 transition duration-300">About Us</a>
+                <a href="/customer/logout" class="text-gray-600 hover:text-pink-500 transition duration-300">Log out</a>
             </div>
         </div>
     </nav>
@@ -30,8 +36,53 @@
         <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
             <h2 class="text-3xl font-bold text-center text-pink-500 mb-8">Our Sweet Creations</h2>
 
+            <div th:if="${errorMessage}" class="p-4 mb-4 bg-red-100 text-red-800 rounded">
+                <p th:text="${errorMessage}">Product not found.</p>
+            </div>
+
             <!-- Product Cards Grid -->
-            <div class="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[65rem] mx-auto" >
+<!--            <div class="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[65rem] mx-auto" >-->
+<!--                &lt;!&ndash; Single Card &ndash;&gt;-->
+<!--                <div th:each="product : ${products}" class="bg-white border border-pink-200 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300">-->
+
+<!--                    &lt;!&ndash; Image Banner &ndash;&gt;-->
+<!--                    <div class="h-64 bg-pink-100 flex items-center justify-center">-->
+<!--                        <img th:src="@{'/images/' + ${product.imageFileName}}"-->
+<!--                             th:alt="${product.name}"-->
+<!--                             class="object-cover h-full w-full" />-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Content Area &ndash;&gt;-->
+<!--                    <div class="p-6 space-y-4">-->
+<!--                        <h3 th:text="${product.name}" class="text-2xl font-extrabold text-pink-600"></h3>-->
+<!--                        <p th:text="${product.description}" class="text-gray-700"></p>-->
+<!--                        <div class="flex items-center justify-between">-->
+<!--                            <span th:text="${product.stock + ' in stock'}" class="inline-block bg-pink-100 text-pink-800 text-sm font-semibold px-3 py-1 rounded-full"></span>-->
+<!--                            <span th:text="${product.price}" class="text-2xl font-bold text-pink-500"></span>-->
+
+<!--                            <span class="input-group-text">Quantity</span>-->
+<!--                            <input type="number" name="quantity" value="1" min="1"-->
+<!--                                   th:max="${product.stock}" class="form-control">-->
+<!--                        </div>-->
+
+<!--                        &lt;!&ndash; borderline &ndash;&gt;-->
+<!--                        <hr class="border-t-2 border-pink-200" />-->
+
+<!--                        <form th:action="@{/user/cart/add/{productId}(productId=${product.id}}"-->
+<!--                              method="post"-->
+<!--                              class="inline-block">-->
+<!--                            <button type="submit"-->
+<!--                                    class="w-full py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full">-->
+<!--                                Add to Cart-->
+<!--                            </button>-->
+<!--                        </form>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <!-- Product Cards Grid -->
+            <div class="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[65rem] mx-auto">
                 <!-- Single Card -->
                 <div th:each="product : ${products}" class="bg-white border border-pink-200 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300">
 
@@ -49,26 +100,34 @@
                         <div class="flex items-center justify-between">
                             <span th:text="${product.stock + ' in stock'}" class="inline-block bg-pink-100 text-pink-800 text-sm font-semibold px-3 py-1 rounded-full"></span>
                             <span th:text="${product.price}" class="text-2xl font-bold text-pink-500"></span>
-
-                            <span class="input-group-text">Quantity</span>
-                            <input type="number" name="quantity" value="1" min="1" th:max="${product.stock}" class="form-control">
                         </div>
 
-                        <!-- borderline -->
-                        <hr class="border-t-2 border-pink-200" />
+                        <!-- Form Starts Here -->
+                        <form th:action="@{/user/cart/add/{productId}(productId=${product.id})}" method="post" class="space-y-2">
+                            <!-- Quantity Input -->
+                            <div class="flex items-center gap-2">
+                                <label class="input-group-text">Quantity</label>
+                                <input type="number"
+                                       name="quantity"
+                                       value="1"
+                                       min="1"
+                                       th:max="${product.stock}"
+                                       class="form-control w-24 rounded border border-pink-300 px-2 py-1" required />
+                            </div>
 
-                        <form th:action="@{/user/cart/add/{productId}(productId=${product.id})}"
-                              method="post"
-                              class="inline-block">
+                            <!-- CSRF Token (if using Spring Security) -->
+<!--                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+
+                            <!-- Submit Button -->
                             <button type="submit"
                                     class="w-full py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full">
                                 Add to Cart
                             </button>
                         </form>
-
                     </div>
                 </div>
             </div>
+
 
         </div>
     </section>

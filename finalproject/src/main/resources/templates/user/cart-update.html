@@ -1,44 +1,85 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Cart Item</title>
-    <!-- include your CSS/JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<h1 class="text-3xl font-bold mb-4">Edit Cart Item</h1>
 
-<form th:action="@{/user/cart/save}" th:object="${item}" method="post" class="max-w-md">
-    <div class="mb-4">
-        <label class="block font-semibold mb-1">Product</label>
-        <input type="text" readonly
-               th:value="${item.product.name}"
-               class="w-full border px-3 py-2 bg-gray-100" />
+<body class="bg-gray-50 font-sans">
+<!-- Navigation -->
+<nav class="bg-white shadow-md py-4">
+    <div class="container mx-auto px-6 flex items-center justify-between">
+        <div class="flex items-center">
+            <a href="/">
+                <span class="text-pink-500 text-2xl font-bold">PastryHaven</span>
+            </a>
+
+            <a class="ml-6 text-gray-600 hover:text-pink-500 transition duration-300">
+                Welcome, <span th:text="${session.customer.firstName}">User</span>!
+            </a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="/user/products" class="text-gray-600 hover:text-pink-500 transition duration-300">Product</a>
+            <a href="/user/cart" class="text-gray-600 hover:text-pink-500 transition duration-300">Cart</a>
+            <a href="/checkout/history" class="text-gray-600 hover:text-pink-500 transition duration-300">History</a>
+            <a href="/customer/aboutus" class="text-gray-600 hover:text-pink-500 transition duration-300">About Us</a>
+            <a href="/customer/logout" class="text-gray-600 hover:text-pink-500 transition duration-300">Log out</a>
+        </div>
     </div>
+</nav>
 
-    <!--    fetch product id-->
-    <input type="hidden" th:field="*{id}" />
-    <input type="hidden" name="productId" th:value="${item.product.id}" />
+<!-- Edit Cart Item Section -->
+<section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12 max-w-md mx-auto">
+        <h1 class="text-3xl font-bold text-center text-pink-500 mb-6">Edit Cart Item</h1>
+        <form th:action="@{/user/cart/save}" th:object="${item}" method="post" class="space-y-6">
 
-    <div class="mb-4">
-        <label class="block font-semibold mb-1" for="quantity">Quantity</label>
-        <input type="number" id="quantity" name="quantity"
-               th:field="*{quantity}"
-               min="1"
-               class="w-full border px-3 py-2" />
+            <!-- Product Name -->
+            <div>
+                <label class="block text-gray-700 font-semibold mb-1">Product</label>
+                <input type="text" readonly
+                       th:value="${item.product.name}"
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-200" />
+            </div>
+
+            <!-- Hidden Fields -->
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" name="productId" th:value="${item.product.id}" />
+
+            <!-- Quantity -->
+            <div>
+                <label for="quantity" class="block text-gray-700 font-semibold mb-1">Quantity</label>
+                <input type="number" id="quantity" name="quantity"
+                       th:field="*{quantity}"
+                       min="1"
+                       th:max="${item.product.stock + item.quantity}"
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-200" />
+            </div>
+
+            <!-- Actions -->
+            <div class="flex space-x-4">
+                <button type="submit"
+                        class="flex-1 py-3 bg-pink-500 text-white font-semibold rounded-full hover:bg-pink-600 transition duration-300">
+                    Save Changes
+                </button>
+                <a th:href="@{/user/cart}"
+                   class="flex-1 py-3 bg-gray-300 text-gray-700 font-semibold rounded-full hover:bg-gray-400 transition duration-300 text-center">
+                    Cancel
+                </a>
+            </div>
+        </form>
     </div>
+</section>
 
-    <input type="hidden" th:field="*{id}" />
-
-    <div class="flex space-x-2">
-        <button type="submit"
-                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-            Save
-        </button>
-        <a th:href="@{/user/cart}"
-           class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
-            Cancel
-        </a>
+<!-- Footer -->
+<footer class="bg-pink-500 text-white py-6 mt-12">
+    <div class="container mx-auto px-6 text-center">
+        <p>&copy; 2025 PastryHaven. All rights reserved.</p>
     </div>
-</form>
+</footer>
 </body>
+
 </html>

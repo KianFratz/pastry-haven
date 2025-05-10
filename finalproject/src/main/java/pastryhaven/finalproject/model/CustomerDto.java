@@ -1,5 +1,6 @@
 package pastryhaven.finalproject.model;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 public class CustomerDto {
@@ -18,6 +19,17 @@ public class CustomerDto {
 
     @NotEmpty(message = "The password is required")
     private String password;
+
+    @NotEmpty(message = "The confirmation password is required")
+    private String confirmPassword;
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -57,5 +69,9 @@ public class CustomerDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isPasswordMatching() {
+        return password != null && password.equals(confirmPassword);
     }
 }

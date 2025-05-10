@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Pastry Haven</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4">Checkout</h1>
+
+  <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+  <div th:if="${cartItems.isEmpty()}" class="alert alert-info">
+    Your cart is empty. <a href="/" class="alert-link">Continue shopping</a>
+  </div>
+
+  <div th:unless="${cartItems.isEmpty()}">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Your Cart</h5>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="item : ${cartItems}">
+            <td th:text="${item.product.name}"></td>
+            <td th:text="${#numbers.formatCurrency(item.product.price)}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${#numbers.formatCurrency(item.product.price * item.quantity)}"></td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <th colspan="3" class="text-end">Total:</th>
+            <th th:text="${#numbers.formatCurrency(total)}"></th>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5>Payment Information</h5>
+      </div>
+      <div class="card-body">
+        <form th:action="@{/checkout/process}" method="post">
+          <div class="mb-3">
+            <label for="paymentMethod" class="form-label">Payment Method</label>
+            <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+              <option value="">Select payment method</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Debit Card">Debit Card</option>
+              <option value="PayPal">PayPal</option>
+              <option value="Cash on Delivery">Cash on Delivery</option>
+            </select>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Complete Payment</button>
+            <a href="/" class="btn btn-outline-secondary">Continue Shopping</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <a th:href="@{/checkout/history}" class="link-primary">View Payment History</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

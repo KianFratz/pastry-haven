@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -17,11 +17,17 @@
                 <a href="/">
                     <span class="text-pink-500 text-2xl font-bold">PastryHaven</span>
                 </a>
+                <!-- Render the username from the model -->
+                <a class="ml-6 text-gray-600 hover:text-pink-500 transition duration-300">
+                    Welcome, <span th:text="${session.customer.firstName}">User</span>!
+                </a>
             </div>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="/customer/aboutus" class="text-gray-600 hover:text-pink-500 transition duration-300">About Us</a>
                 <a href="/user/products" class="text-gray-600 hover:text-pink-500 transition duration-300">Product</a>
                 <a href="/user/cart" class="text-gray-600 hover:text-pink-500 transition duration-300">Cart</a>
+                <a href="/checkout/history" class="text-gray-600 hover:text-pink-500 transition duration-300">History</a>
+                <a href="/customer/aboutus" class="text-gray-600 hover:text-pink-500 transition duration-300">About Us</a>
+                <a href="/customer/logout" class="text-gray-600 hover:text-pink-500 transition duration-300">Log out</a>
             </div>
         </div>
     </nav>
@@ -42,7 +48,7 @@
         <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
             <div class="flex flex-col md:flex-row items-center">
                 <div class="md:w-1/2 mb-8 md:mb-0">
-                    <img src="pastrystory.jpg" alt="Our Story" class="rounded-2xl shadow-md">
+                    <img src="/pastrystory.jpg" alt="Our Story" class="rounded-2xl shadow-md">
                 </div>
                 <div class="md:w-1/2 md:pl-12">
                     <h2 class="text-3xl font-bold text-pink-500 mb-4">Our Story</h2>
@@ -75,7 +81,7 @@
             <div
                 class="bg-white rounded-3xl shadow-lg p-8 text-center transform transition duration-500 hover:scale-105">
                 <div class="w-32 h-32 rounded-full mx-auto overflow-hidden mb-6 border-4 border-pink-200">
-                    <img src="kian.png" alt="Team Member" class="w-full h-full object-cover">
+                    <img src="/kian.png" alt="Team Member" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-gray-800">Kian Fratz Pagobo</h3>
                 <p class="text-pink-500 mb-4">Leader</p>
@@ -93,7 +99,7 @@
             <div
                 class="bg-white rounded-3xl shadow-lg p-8 text-center transform transition duration-500 hover:scale-105">
                 <div class="w-32 h-32 rounded-full mx-auto overflow-hidden mb-6 border-4 border-pink-200">
-                    <img src="gisele.jpg" alt="Team Member" class="w-full h-full object-cover">
+                    <img src="/gisele.jpg" alt="Team Member" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-gray-800">Gisele Joy Pilar</h3>
                 <p class="text-pink-500 mb-4">Member</p>
@@ -111,7 +117,7 @@
             <div
                 class="bg-white rounded-3xl shadow-lg p-8 text-center transform transition duration-500 hover:scale-105">
                 <div class="w-32 h-32 rounded-full mx-auto overflow-hidden mb-6 border-4 border-pink-200">
-                    <img src="visoc.jpg" alt="Team Member" class="w-full h-full object-cover">
+                    <img src="/visoc.jpg" alt="Team Member" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-gray-800">Aiesha Visoc</h3>
                 <p class="text-pink-500 mb-4">Member</p>
@@ -130,7 +136,7 @@
             <div
                 class="bg-white rounded-3xl shadow-lg p-8 text-center transform transition duration-500 hover:scale-105">
                 <div class="w-32 h-32 rounded-full mx-auto overflow-hidden mb-6 border-4 border-pink-200">
-                    <img src="tani.png" alt="Team Member" class="w-full h-full object-cover">
+                    <img src="/tani.png" alt="Team Member" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-gray-800">Ma Faith Tani</h3>
                 <p class="text-pink-500 mb-4">Member</p>
@@ -148,7 +154,7 @@
             <div
                 class="bg-white rounded-3xl shadow-lg p-8 text-center transform transition duration-500 hover:scale-105">
                 <div class="w-32 h-32 rounded-full mx-auto overflow-hidden mb-6 border-4 border-pink-200">
-                    <img src="christian.png" alt="Team Member" class="w-full h-full object-cover">
+                    <img src="/christian.png" alt="Team Member" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-gray-800">Christian Llyod Rivera</h3>
                 <p class="text-pink-500 mb-4">Member</p>

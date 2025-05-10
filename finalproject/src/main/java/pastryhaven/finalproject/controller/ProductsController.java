@@ -1,5 +1,6 @@
 package pastryhaven.finalproject.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pastryhaven.finalproject.model.Customer;
 import pastryhaven.finalproject.model.Product;
 import pastryhaven.finalproject.model.ProductDto;
 import pastryhaven.finalproject.repository.ProductsRepository;
@@ -19,16 +21,28 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Controller
+@SessionAttributes("customer")
 @RequestMapping("/products")
 public class ProductsController {
 
     @Autowired
     private ProductsRepository productsRepository;
 
+
+
     @GetMapping({"", "/"})
-    public String showProductList(Model model) {
+    public String showProductList(Model model, @ModelAttribute("customer") Customer customer,
+                                  HttpSession session) {
         List<Product> products = productsRepository.findAll();
         model.addAttribute("products", products);
+
+        // Store username for all future requests
+//        session.setAttribute("username", customer.getFirstName());// for this view
+//        model.addAttribute("username", customer.getFirstName());
+
+        String username = customer.getFirstName();
+        model.addAttribute("username", username);
+
         return "products/manage-pastries";
     }
 

@@ -1,112 +1,102 @@
 package pastryhaven.finalproject.model;
 
+
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "payments")
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "paymongo_id")
-    private Long paymongo_id;
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "payment_date", nullable = false)
+    private LocalDateTime paymentDate;
+
+    @Column(name = "total_amount", nullable = false)
+    private BigDecimal totalAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CART_ITEM_ID", nullable = false)
-    private CartItem cart;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
-    @Column(name = "amount")
-    private BigDecimal amount;
+    public Customer getCustomer() {
+        return customer;
+    }
 
-    @Column(name = "payment_id")
-    private String payment_id; // Paymongo payment ID
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
-    @Column(name = "reference_number")
-    private String referenceNumber;
+    @Column(name = "payment_method", nullable = false)
+    private String paymentMethod;
 
-    @Column(name = "status")
-    private String status;
+    @OneToMany(mappedBy = "payment",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<PaymentItem> paymentItems = new ArrayList<>();
 
-    @Column(name = "checkout_url")
-    private String checkoutUrl;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    // Constructors
+    public Payment() {
+        this.paymentDate = LocalDateTime.now();
+    }
+
+    public Payment(BigDecimal totalAmount, String paymentMethod) {
+        this.paymentDate = LocalDateTime.now();
+        this.totalAmount = totalAmount;
+        this.paymentMethod = paymentMethod;
+    }
 
     public Long getId() {
-        return paymongo_id;
+        return id;
     }
 
     public void setId(Long id) {
-        this.paymongo_id = id;
+        this.id = id;
     }
 
-    public CartItem getCart() {
-        return cart;
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
     }
 
-    public void setCart(CartItem cart) {
-        this.cart = cart;
+    public void setPaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public String getPaymentId() {
-        return payment_id;
+    public String getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public void setPaymentId(String paymentId) {
-        this.payment_id = paymentId;
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
-    public String getReferenceNumber() {
-        return referenceNumber;
+    public List<PaymentItem> getPaymentItems() {
+        return paymentItems;
     }
 
-    public void setReferenceNumber(String referenceNumber) {
-        this.referenceNumber = referenceNumber;
+    public void setPaymentItems(List<PaymentItem> paymentItems) {
+        this.paymentItems = paymentItems;
+    }
+    public void addPaymentItem(PaymentItem item) {
+        paymentItems.add(item);
+        item.setPayment(this);
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getCheckoutUrl() {
-        return checkoutUrl;
-    }
-
-    public void setCheckoutUrl(String checkoutUrl) {
-        this.checkoutUrl = checkoutUrl;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
